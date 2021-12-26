@@ -49,25 +49,15 @@ contract CoffeePortal {
     string memory _name,
     uint256 _payAmount
   ) public payable {
-    // cost
     uint256 cost = 0.01 ether;
-
-    // check if payamount <= cost – else it's insufficient amount
     require(_payAmount <= cost, "Insufficient Ether provided");
 
-    // increment totalCoffee
     totalCoffee++;
-
-    // push the new coffee in coffee array w/ required parameters
     coffee.push(Coffee(msg.sender, _message, _name, block.timestamp));
 
-    // make the user (owner) pay the amount of coffee
     (bool success, ) = owner.call{value: _payAmount}("");
-
-    // require(success, "Failed")
     require(success, "Failed to send money");
 
-    // emit (send the message?) – event parameters
     emit NewCoffee(msg.sender, block.timestamp, _message, _name);
   }
 }
